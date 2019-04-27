@@ -33,7 +33,7 @@ for hood in hoods:
     h = {
         "id": hood.find("id").text,
         "name": hood.find("name").text,
-        #"zindex": hood.find("zindex").text, # <zindex currency="USD">126400</zindex>
+        "zindex": hood.find("zindex", attrs={"currency": "USD"}).text, #> AttributeError: 'NoneType' object has no attribute 'text'
         "url": hood.find("url").text,
         "lat": hood.find("latitude").text,
         "long": hood.find("longitude").text,
