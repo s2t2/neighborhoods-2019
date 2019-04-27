@@ -19,8 +19,6 @@ print("RESPONSE", response.status_code, type(response))
 
 soup = BeautifulSoup(response.text, features="lxml") # pass "features" to suppress warning message
 
-#breakpoint()
-
 #region = soup.find("response").find("region")
 subregion_type = soup.find("response").find("subregiontype")
 
@@ -29,10 +27,15 @@ hoods = soup.find("response").find("list").find_all("region")
 
 print(f"FOUND {hoods_count.text} {subregion_type.text.upper()}(S):")
 
+def to_usd(my_price):
+    #return "${0:,.2f}".format(my_price)
+    return "${0:,.0f}".format(my_price)
+
 for hood in hoods:
 
     try:
         zindex = hood.find("zindex", attrs={"currency": "USD"}).text
+        zindex = float(zindex)
     except:
         #print("PRICE SCORE ERROR", hood.find("name").text)
         zindex = None
@@ -46,4 +49,7 @@ for hood in hoods:
         "long": hood.find("longitude").text,
     }
 
-    pprint(h)
+    if h["zindex"]:
+        print(h["id"], h["name"], f"({to_usd(h['zindex'])})")
+    else:
+        print(h["id"], h["name"])
