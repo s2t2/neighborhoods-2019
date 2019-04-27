@@ -30,12 +30,20 @@ hoods = soup.find("response").find("list").find_all("region")
 print(f"FOUND {hoods_count.text} {subregion_type.text.upper()}(S):")
 
 for hood in hoods:
+
+    try:
+        zindex = hood.find("zindex", attrs={"currency": "USD"}).text
+    except:
+        #print("PRICE SCORE ERROR", hood.find("name").text)
+        zindex = None
+
     h = {
         "id": hood.find("id").text,
         "name": hood.find("name").text,
-        "zindex": hood.find("zindex", attrs={"currency": "USD"}).text, #> AttributeError: 'NoneType' object has no attribute 'text'
+        "zindex": zindex, #> AttributeError: 'NoneType' object has no attribute 'text'
         "url": hood.find("url").text,
         "lat": hood.find("latitude").text,
         "long": hood.find("longitude").text,
     }
+
     pprint(h)
